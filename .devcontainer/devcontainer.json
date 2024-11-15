@@ -1,0 +1,34 @@
+{
+    "name": "customer-management",
+    "build": {
+      "dockerfile": "Dockerfile",
+      "context": ".."
+    },
+    "features": {
+      "ghcr.io/devcontainers/features/python:1": {
+        "installTools": true,
+        "version": "3.12.3"
+      }
+    },
+    "forwardPorts": [
+      8000
+    ],
+    "postCreateCommand": "pip install poetry",
+    "customizations": {
+      "vscode": {
+        "extensions": [
+          "ms-azuretools.vscode-docker",
+          "ms-python.vscode-pylance",
+          "ms-python.python"
+        ],
+        "settings": {
+          "[python]": {
+            "diffEditor.ignoreTrimWhitespace": false,
+            "editor.formatOnSave": false,
+            "editor.indentSize": "tabSize"
+          }
+        }
+      }
+    },
+    "remoteUser": "root"
+  }
