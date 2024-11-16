@@ -5,13 +5,14 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
 
+
 DB_USER = os.getenv("DB_USER")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_HOST = os.getenv("DB_HOST")
 DB_PORT = os.getenv("DB_PORT")
 DATABASE = os.getenv("DATABASE")
 
-HANDLER_CONNECTION = "postgresql+psycopg2://admin:admin@172.17.0.1:5432/customers_db"
+HANDLER_CONNECTION = f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DATABASE}"
 
 try:
     engine = create_engine(HANDLER_CONNECTION)
