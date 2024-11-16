@@ -13,11 +13,9 @@ DATABASE = os.getenv("DATABASE")
 
 HANDLER_CONNECTION = "postgresql+psycopg2://admin:admin@172.17.0.1:5432/customers_db"
 
-
 try:
     engine = create_engine(HANDLER_CONNECTION)
     connection = engine.connect()
-    print("Connection successfully!")
     connection.close()
 except OperationalError as e:
     print(f"Error to connect a PostgreSQL: {e}")
