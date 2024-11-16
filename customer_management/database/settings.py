@@ -1,7 +1,9 @@
 """
 Module to connect to the PostgreSQL database
 """
+
 import os
+
 from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
 
