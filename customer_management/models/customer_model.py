@@ -1,7 +1,7 @@
 """
 Module to define model customers
 """
-from sqlalchemy import String
+from sqlalchemy import Integer
 
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
@@ -16,7 +16,7 @@ class Customer:
 
     __tablename__ = 'customers'
 
-    id: Mapped[int] = mapped_column(String, primary_key=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str]
     email: Mapped[str]
     contact: Mapped[str]
