@@ -3,7 +3,9 @@ Module to extract data for the bronze layer
 """
 
 import pandas as pd
+
 from sqlalchemy import text
+
 from customer_management.database import engine
 
 def bronze_customers():
