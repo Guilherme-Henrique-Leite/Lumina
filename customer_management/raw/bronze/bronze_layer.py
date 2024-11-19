@@ -23,4 +23,3 @@ def bronze_customers():
 
 if __name__ == "__main__":
     df = bronze_customers()
-    print(df.head())
