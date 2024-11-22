@@ -10,7 +10,7 @@ from customer_management.database import engine
 
 def bronze_customers():
     """
-    Extract data from the customers table and return it as a DataFrame
+    Extract data from the customers table and return it as a DataFrame.
     """
     try:
         with engine.connect() as connection:
@@ -20,6 +20,3 @@ def bronze_customers():
     except Exception as e:
         print(f"Error extracting data for the bronze layer: {e}")
         return pd.DataFrame()
-
-if __name__ == "__main__":
-    df = bronze_customers()
