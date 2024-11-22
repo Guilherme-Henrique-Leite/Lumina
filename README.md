@@ -35,6 +35,7 @@ The project follows a layered architecture to process data incrementally and org
         cd customer-management
 
 ## Install dependencies with Poetry:
+    -> poetry shell
     -> poetry install
 
 ## Set up the environment:
