@@ -2,10 +2,15 @@
 Module to display graphical visualizations
 """
 import streamlit as st
+
 import plotly.express as px
 import plotly.graph_objects as go
 
 def run():
+    """
+    Function to run charts in display
+    """
+    
     st.title("Visualização Gráfica")
 
     if 'df_gold' not in st.session_state:
@@ -15,19 +20,19 @@ def run():
     df = st.session_state['df_gold']
 
     st.header("Distribuição de Clientes por País")
-    df_paises = df['País'].value_counts().reset_index()
-    df_paises.columns = ['País', 'Quantidade']
+    df_country = df['País'].value_counts().reset_index()
+    df_country.columns = ['País', 'Quantidade']
 
-    fig1 = go.Figure(
+    bar_chart = go.Figure(
         data=[
             go.Bar(
-                x=df_paises['País'],
-                y=df_paises['Quantidade'],
+                x=df_country['País'],
+                y=df_country['Quantidade'],
                 marker=dict(color="lightgreen"),
             )
         ]
     )
-    fig1.update_layout(
+    bar_chart.update_layout(
         title="Distribuição de Clientes por País",
         xaxis_title="País",
         yaxis_title="Número de Clientes",
@@ -36,15 +41,15 @@ def run():
         height=600,
         margin=dict(l=20, r=20, t=50, b=50),
     )
-    st.plotly_chart(fig1, use_container_width=True)
+    st.plotly_chart(bar_chart)
 
     st.header("Distribuição Percentual por País")
-    fig2 = px.pie(
-        df_paises,
+    pie_chart = px.pie(
+        df_country,
         names='País',
         values='Quantidade',
         title="Distribuição Percentual de Clientes por País",
         template="plotly_dark",
     )
-    fig2.update_traces(textinfo='percent+label')
-    st.plotly_chart(fig2, use_container_width=True)
+    pie_chart.update_traces(textinfo='percent+label')
+    st.plotly_chart(pie_chart)
