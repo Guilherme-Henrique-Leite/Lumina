@@ -2,10 +2,13 @@
 Module to display all data
 """
 import time
+
 import streamlit as st
-from customer_management.utils import run_data_pipeline
+
 from st_aggrid import AgGrid
 from st_aggrid.grid_options_builder import GridOptionsBuilder
+
+from customer_management.utils import run_data_pipeline
 
 def run():
     """
