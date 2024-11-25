@@ -50,4 +50,5 @@ Create a .env file with the necessary database connection details.
 
 ## Next Steps
 - Create visualizations and reports in Streamlit.
+- Improve homepage and data visualization
 - Write tests for the pipeline.
