@@ -1,6 +1,7 @@
 """
 Module to outsource table_registry
 """
+from customer_management.utils.load_css import load_css
 
 from customer_management.utils.registry import table_registry
 
@@ -16,3 +17,5 @@ from customer_management.utils.contains_emoji import contains_emoji
 from customer_management.utils.clean_data import clean_and_validate_data
 
 from customer_management.utils.layer_controller import run_data_pipeline
+
+from customer_management.utils.transform_excel import convert_df_to_excel
