@@ -1,0 +1,208 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
+
+.main-title i {
+    margin-right: 10px;
+    color: #32CD32;
+}
+
+.main-title {
+    text-align: center;
+    font-size: 3em;
+    margin-bottom: 1em;
+    color: white;
+    font-weight: bold;
+    padding: 20px 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+div[data-baseweb="select"] > div,
+.stTextInput > div[data-baseweb="base-input"] {
+    border-color: #404040 !important;
+    box-shadow: none !important;
+}
+
+div[data-baseweb="select"]:hover > div,
+.stTextInput > div[data-baseweb="base-input"]:hover {
+    border-color: #404040 !important;
+}
+
+div[data-baseweb="select"]:focus-within > div,
+.stTextInput > div[data-baseweb="base-input"]:focus-within {
+    border-color: #32CD32 !important;
+    box-shadow: 0 0 0 1px #32CD32 !important;
+}
+
+.streamlit-expanderHeader {
+    color: white !important;
+}
+
+.streamlit-expanderHeader:hover {
+    color: #32CD32 !important;
+}
+
+.streamlit-expanderHeader:hover svg {
+    fill: #32CD32 !important;
+}
+
+div[data-baseweb="select"] ul li[aria-selected="true"] {
+    background-color: #0B4A0B !important;
+}
+
+div[data-baseweb="select"] ul li:hover {
+    background-color: rgba(11, 74, 11, 0.95) !important;
+}
+
+div[data-baseweb="select"] span[aria-selected="true"] {
+    background-color: #0B4A0B !important;
+}
+
+div[data-baseweb="select"] [role="presentation"] {
+    color: #9932CC !important;
+}
+
+div[data-baseweb="select"] [role="presentation"]:hover {
+    color: #7B2D99 !important;
+}
+
+.stTextInput > div[data-baseweb="base-input"] > div {
+    border-color: #404040 !important;
+    box-shadow: none !important;
+}
+
+.stTextInput > div[data-baseweb="base-input"] > div:focus-within {
+    border-color: #32CD32 !important;
+    box-shadow: 0 0 0 1px #32CD32 !important;
+}
+
+.stTextInput > div[data-baseweb="base-input"][data-error] {
+    border-color: #404040 !important;
+}
+
+[data-testid="stTextInput"] div[data-baseweb="base-input"] {
+    border-color: #404040 !important;
+}
+
+[data-testid="stTextInput"] div[data-baseweb="base-input"]:focus-within {
+    border-color: #32CD32 !important;
+    box-shadow: 0 0 0 1px #32CD32 !important;
+}
+
+[data-testid="stTextInput"] div[data-baseweb="base-input"][data-error="true"] {
+    border-color: #404040 !important;
+}
+
+[data-testid="stTextInput"] div[data-baseweb="base-input"] input {
+    border-color: #404040 !important;
+}
+
+[data-testid="stTextInput"] div[data-baseweb="base-input"] input:focus {
+    border-color: #32CD32 !important;
+    box-shadow: 0 0 0 1px #32CD32 !important;
+}
+
+.stTextInput div[data-baseweb="base-input"],
+.stTextInput div[data-baseweb="base-input"] > div,
+.stTextInput div[data-baseweb="base-input"] input,
+[data-testid="stTextInput"] div[data-baseweb="base-input"],
+[data-testid="stTextInput"] div[data-baseweb="base-input"] > div,
+[data-testid="stTextInput"] div[data-baseweb="base-input"] input,
+div[data-baseweb="base-input"],
+div[data-baseweb="base-input"] > div,
+div[data-baseweb="base-input"] input {
+    border-color: #404040 !important;
+    box-shadow: none !important;
+}
+
+.stTextInput div[data-baseweb="base-input"]:focus-within,
+.stTextInput div[data-baseweb="base-input"] > div:focus-within,
+.stTextInput div[data-baseweb="base-input"] input:focus,
+[data-testid="stTextInput"] div[data-baseweb="base-input"]:focus-within,
+[data-testid="stTextInput"] div[data-baseweb="base-input"] > div:focus-within,
+[data-testid="stTextInput"] div[data-baseweb="base-input"] input:focus,
+div[data-baseweb="base-input"]:focus-within,
+div[data-baseweb="base-input"] > div:focus-within,
+div[data-baseweb="base-input"] input:focus {
+    border-color: #32CD32 !important;
+    box-shadow: 0 0 0 1px #32CD32 !important;
+}
+
+.stTextInput div[data-baseweb="base-input"][data-error],
+[data-testid="stTextInput"] div[data-baseweb="base-input"][data-error],
+div[data-baseweb="base-input"][data-error],
+.stTextInput div[data-baseweb="base-input"][data-error="true"],
+[data-testid="stTextInput"] div[data-baseweb="base-input"][data-error="true"],
+div[data-baseweb="base-input"][data-error="true"] {
+    border-color: #404040 !important;
+    box-shadow: none !important;
+}
+
+.stMultiSelect span[data-baseweb="tag"] {
+    background-color: #0B4A0B !important;
+    border-color: #0B4A0B !important;
+}
+
+.stMultiSelect span[data-baseweb="tag"] button {
+    background-color: #0B4A0B !important;
+    border-color: #0B4A0B !important;
+}
+
+.stMultiSelect span[data-baseweb="tag"] button:hover {
+    background-color: #073907 !important;
+}
+
+.stMultiSelect span[data-baseweb="tag"] span {
+    color: white !important;
+}
+
+[data-testid="stExpander"] svg {
+    fill: #32CD32 !important;
+}
+
+/* Estilos para o botão X no select */
+div[data-baseweb="select"] [role="presentation"] svg,
+div[data-baseweb="select"] button[aria-label="Clear value"],
+div[data-baseweb="select"] button[role="button"] svg,
+div[data-baseweb="select"] div[role="presentation"] svg {
+    fill: #D3D3D3 !important;  /* Cinza claro */
+    color: #D3D3D3 !important;
+    stroke: #D3D3D3 !important;
+}
+
+div[data-baseweb="select"] [role="presentation"]:hover svg,
+div[data-baseweb="select"] button[aria-label="Clear value"]:hover svg,
+div[data-baseweb="select"] button[role="button"]:hover svg,
+div[data-baseweb="select"] div[role="presentation"]:hover svg {
+    fill: #A9A9A9 !important;
+    color: #A9A9A9 !important;
+    stroke: #A9A9A9 !important;
+}
+
+.stDownloadButton button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.stDownloadButton button i {
+    font-size: 16px;
+}
+
+.download-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background-color: #0B4A0B;
+    color: white;
+    border-radius: 4px;
+    text-decoration: none;
+    gap: 8px;
+}
+
+.download-button:hover {
+    background-color: #073907;
+}
+
+.download-button i {
+    font-size: 16px;
+}
