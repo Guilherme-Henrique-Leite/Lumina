@@ -17,7 +17,7 @@ def render_sidebar():
         st.title("Menu de Navegação")
         page = option_menu(
             menu_title=None,
-            options=["Visão Geral", "Visualização Gráfica"],
+            options=["Painel Geral", "Visualização Gráfica"],
             icons=["house", "bar-chart-fill"],
             menu_icon="cast",
             default_index=0,
