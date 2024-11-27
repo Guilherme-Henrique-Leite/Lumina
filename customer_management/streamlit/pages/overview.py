@@ -5,17 +5,20 @@ import time
 
 import streamlit as st
 
-from st_aggrid import AgGrid
-from st_aggrid.grid_options_builder import GridOptionsBuilder
-
+from customer_management.utils import load_css
 from customer_management.utils import run_data_pipeline
+from customer_management.utils import convert_df_to_excel
+
+from customer_management.streamlit.pages.components.grid_config import render_grid
+
 
 def run():
     """
     Function to run overview in display
     """
-    st.title("Visão Geral")
-
+    load_css()
+    st.title("Painel de Clientes")
+    
     placeholder = st.empty()
     if 'df_gold' not in st.session_state:
         with placeholder.container():
@@ -30,50 +33,71 @@ def run():
         success_placeholder.empty()
 
     df = st.session_state['df_gold']
-
-    st.subheader("Filtros")
-    col1, col2 = st.columns([1, 1])
-    with col1:
-        filter_country = st.multiselect(
-            "Filtrar por País:",
-            options=df['País'].unique(),
-            default=[],
-        )
-    with col2:
-        filter_domain = st.multiselect(
-            "Filtrar por Domínio:",
-            options=df['Domínio'].unique(),
-            default=[],
-        )
-
     df_filtered = df.copy()
-    if filter_country:
-        df_filtered = df_filtered[df_filtered['País'].isin(filter_country)]
-    if filter_domain:
-        df_filtered = df_filtered[df_filtered['Domínio'].isin(filter_domain)]
-
-    st.header("Métricas Principais")
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Total de Clientes", len(df_filtered))
-    col2.metric("Países Atendidos", df_filtered['País'].nunique())
-    col3.metric("Domínio Mais Comum", df_filtered['Domínio'].mode()[0] if not df_filtered.empty else "N/A")
 
     st.header("Dados Gerais")
     if df_filtered.empty:
         st.warning("Nenhum dado encontrado com os filtros selecionados.")
     else:
-        gb = GridOptionsBuilder.from_dataframe(df_filtered)
-        gb.configure_pagination(paginationAutoPageSize=False, paginationPageSize=20)
-        gb.configure_default_column(editable=False, filter=True, sortable=True)
-        gb.configure_grid_options(forceFitColumns=True)
-        grid_options = gb.build()
+        with st.expander("Filtros", expanded=False):
+            col1, col2, col3, col4, col5 = st.columns(5)
+            
+            with col1:
+                filter_client_code = st.multiselect(
+                    "Código Cliente:",
+                    options=df['Código Cliente'].unique(),
+                    default=[],
+                )
+                
+            with col2:
+                filter_name = st.multiselect(
+                    "Nome:",
+                    options=df['Nome'].unique(),
+                    default=[],
+                )
+            
+            with col3:
+                filter_country = st.multiselect(
+                    "País:",
+                    options=df['País'].unique(),
+                    default=[],
+                )
+            with col4:
+                filter_city = st.multiselect(
+                    "Cidade:",
+                    options=df['Cidade'].unique(),
+                    default=[],
+                )
+            with col5:
+                filter_neighborhood = st.multiselect(
+                    "Bairro:",
+                    options=df['Bairro'].unique(),
+                    default=[],
+                )
+            
+            
 
-        AgGrid(
-            df_filtered,
-            gridOptions=grid_options,
-            height=600,
-            width="100%",
-            theme="streamlit",
-            fit_columns_on_grid_load=True,
-            domLayout="autoHeight",
-        )
+        if filter_client_code:
+            df_filtered = df_filtered[df_filtered['Código Cliente'].isin(filter_client_code)]
+        elif filter_name:
+            df_filtered = df_filtered[df_filtered['Nome'].isin(filter_name)]    
+        elif filter_country:
+            df_filtered = df_filtered[df_filtered['País'].isin(filter_country)]
+        elif filter_city:
+            df_filtered = df_filtered[df_filtered['Cidade'].isin(filter_city)]
+        elif filter_neighborhood:
+            df_filtered = df_filtered[df_filtered['Bairro'].isin(filter_neighborhood)]
+        
+        render_grid(df_filtered)
+
+        col_download, _ = st.columns([1, 4])
+        with col_download:
+            excel_data = convert_df_to_excel(df_filtered)
+            st.markdown(
+                f'''
+                <a href="#" class="download-button" download="dados_clientes.xlsx">
+                    <i class="fas fa-download"></i> Baixar Excel
+                </a>
+                ''',
+                unsafe_allow_html=True
+            )
