@@ -21,6 +21,8 @@ def gold_customers(df_silver):
             'email_domain': 'Domínio',
             'contact': 'Contato',
             'country': 'País',
+            'city': 'Cidade',
+            'neighborhood': 'Bairro',
         },
         inplace=True,
     )
