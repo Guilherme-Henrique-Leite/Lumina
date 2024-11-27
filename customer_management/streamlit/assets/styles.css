@@ -159,7 +159,6 @@ div[data-baseweb="base-input"][data-error="true"] {
     fill: #32CD32 !important;
 }
 
-/* Estilos para o botão X no select */
 div[data-baseweb="select"] [role="presentation"] svg,
 div[data-baseweb="select"] button[aria-label="Clear value"],
 div[data-baseweb="select"] button[role="button"] svg,
@@ -205,4 +204,11 @@ div[data-baseweb="select"] div[role="presentation"]:hover svg {
 
 .download-button i {
     font-size: 16px;
+}
+
+.expander-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 20px;
 }
