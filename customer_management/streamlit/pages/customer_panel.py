@@ -19,6 +19,12 @@ def run():
     load_css()
     st.title("Painel de Clientes")
     
+    if 'df_gold' not in st.session_state:
+        st.warning("Nenhum dado encontrado. Por favor, retorne à página principal.")
+        return
+    
+    df = st.session_state['df_gold']
+    
     if 'filter_client_code' not in st.session_state:
         st.session_state.filter_client_code = []
     if 'filter_name' not in st.session_state:
@@ -42,12 +48,7 @@ def run():
             x for x in st.session_state[field] 
             if x in available_options
         ]
-    
-    if 'df_gold' not in st.session_state:
-        st.warning("Nenhum dado encontrado. Por favor, retorne à página principal.")
-        return
 
-    df = st.session_state['df_gold']
     df_filtered = df.copy()
 
     st.header("Dados Gerais")
@@ -73,7 +74,6 @@ def run():
                 filter_client_code = st.multiselect(
                     "Código Cliente:",
                     options=df_filtered['Código Cliente'].unique(),
-                    default=st.session_state.filter_client_code,
                     key='filter_client_code'
                 )
             
@@ -82,7 +82,6 @@ def run():
                 filter_name = st.multiselect(
                     "Nome:",
                     options=df_filtered['Nome'].unique(),
-                    default=st.session_state.filter_name,
                     key='filter_name'
                 )
             
@@ -91,7 +90,6 @@ def run():
                 filter_country = st.multiselect(
                     "País:",
                     options=df_filtered['País'].unique(),
-                    default=st.session_state.filter_country,
                     key='filter_country'
                 )
             
@@ -100,7 +98,6 @@ def run():
                 filter_city = st.multiselect(
                     "Cidade:",
                     options=df_filtered['Cidade'].unique(),
-                    default=st.session_state.filter_city,
                     key='filter_city'
                 )
             
@@ -109,7 +106,6 @@ def run():
                 filter_neighborhood = st.multiselect(
                     "Bairro:",
                     options=df_filtered['Bairro'].unique(),
-                    default=st.session_state.filter_neighborhood,
                     key='filter_neighborhood'
                 )
 
