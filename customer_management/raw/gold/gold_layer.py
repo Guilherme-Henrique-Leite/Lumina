@@ -12,7 +12,7 @@ def gold_customers(df_silver):
     Returns:
         pd.DataFrame: Gold layer data ready for displayed.
     """
-
+    
     df_silver.rename(
         columns={
             'id': 'Código Cliente',
@@ -26,5 +26,14 @@ def gold_customers(df_silver):
         },
         inplace=True,
     )
-
-    return df_silver
+    
+    df_gold = df_silver.dropna(subset=['País', 'Cidade', 'Bairro'])
+    
+    df_gold = df_gold[
+        (df_gold['País'] != 'NULL') & (df_gold['País'].str.strip() != '') &
+        (df_gold['Cidade'] != 'NULL') & (df_gold['Cidade'].str.strip() != '') &
+        (df_gold['Bairro'] != 'NULL') & (df_gold['Bairro'].str.strip() != '')
+    ]
+    
+    
+    return df_gold
