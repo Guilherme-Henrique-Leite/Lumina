@@ -7,7 +7,6 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-pandas = "^2.2.3"
 streamlit = "^1.40.1"
 taskipy = "^1.14.0"
 sqlalchemy = "^2.0.36"
@@ -19,6 +18,11 @@ matplotlib = "^3.9.2"
 plotly = "^5.24.1"
 streamlit-option-menu = "^0.4.0"
 streamlit-aggrid = "^1.0.5"
+scikit-learn = "^1.6.0"
+pandas = "^2.2.3"
+statsmodels = "^0.14.4"
+pmdarima = "^2.0.4"
+pycountry = "^24.6.1"
 
 [tool.taskipy.tasks]
 run = "streamlit run app.py"
