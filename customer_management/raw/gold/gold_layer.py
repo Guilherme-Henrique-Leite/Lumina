@@ -1,10 +1,8 @@
 """
 Module to transform data from the silver layer to the gold layer.
 """
-import pandas as pd
 import logging
 
-from customer_management.utils.country_mapping import COUNTRY_MAPPING, VALID_COUNTRIES
 from customer_management.utils.normalize_country_names import normalize_country_name
 
 logger = logging.getLogger(__name__)
@@ -21,7 +19,7 @@ def gold_customers(df_silver):
         pd.DataFrame: Processed data with standardized country names, 
                      cleaned locations and proper formatting.
     """
-    registros_iniciais = len(df_silver)
+    initial_records = len(df_silver)
     df_gold = df_silver.copy()
     
     df_gold.rename(
@@ -51,17 +49,14 @@ def gold_customers(df_silver):
     df_gold['Cidade'] = df_gold['Cidade'].str.title()
     df_gold['Bairro'] = df_gold['Bairro'].str.title()
     
-    df_gold['Data_Processamento'] = pd.Timestamp.now()
-    df_gold['Versao_Processamento'] = '1.0'
-    
-    registros_finais = len(df_gold)
-    registros_removidos = registros_iniciais - registros_finais
+    final_records = len(df_gold)
+    removed_records = initial_records - final_records
     
     logger.info(f"""
-    Processamento concluído:
-    - Registros iniciais: {registros_iniciais}
-    - Registros válidos: {registros_finais}
-    - Registros removidos: {registros_removidos} ({(registros_removidos/registros_iniciais)*100:.1f}%)
+    Ready:
+    - Initial records: {initial_records}
+    - Valid records: {final_records}
+    - Removed records: {removed_records} ({(removed_records/initial_records)*100:.1f}%)
     """)
     
     return df_gold
