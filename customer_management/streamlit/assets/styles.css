@@ -163,7 +163,7 @@ div[data-baseweb="select"] [role="presentation"] svg,
 div[data-baseweb="select"] button[aria-label="Clear value"],
 div[data-baseweb="select"] button[role="button"] svg,
 div[data-baseweb="select"] div[role="presentation"] svg {
-    fill: #D3D3D3 !important;  /* Cinza claro */
+    fill: #D3D3D3 !important;
     color: #D3D3D3 !important;
     stroke: #D3D3D3 !important;
 }

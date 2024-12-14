@@ -62,17 +62,29 @@ def generate_next_code(df):
         return 1
     return df['Código Cliente'].max() + 1
 
+def add_customer_to_dataframe(df, new_customer_data, codigo_cliente):
+    """Adds a new customer to the existing DataFrame with proper formatting"""
+    new_customer = pd.DataFrame({
+        'Código Cliente': [codigo_cliente],
+        'Nome': [new_customer_data['name']],
+        'Email': [new_customer_data['email']],
+        'Contato': [new_customer_data['contact']],
+        'País': [new_customer_data['country'].title()],
+        'Cidade': [new_customer_data['city'].title()],
+        'Bairro': [new_customer_data['neighborhood'].title()],
+        'Data_Cadastro': [datetime.now(pytz.timezone('America/Sao_Paulo')).replace(tzinfo=None)]
+    })
+    return pd.concat([df, new_customer], ignore_index=True)
+
 def run():
     """Function to run customer registration page"""
     st.title("Cadastro de Clientes")
-    
-    st.session_state['df_gold'] = run_data_pipeline()
     
     if 'df_gold' not in st.session_state:
         st.warning("Nenhum dado encontrado. Por favor, retorne à página principal.")
         return
     
-    df = st.session_state['df_gold'] 
+    df = st.session_state['df_gold']
     
     with st.expander("Formulário de Cadastro", expanded=True):
         with st.form("customer_registration", clear_on_submit=True):
@@ -156,6 +168,8 @@ def run():
                     if error:
                         st.error(f"Erro ao cadastrar cliente: {error}")
                     else:
+                        st.session_state['df_gold'] = run_data_pipeline()
+                        
                         new_customer = pd.DataFrame({
                             'Nome': [nome],
                             'Código Cliente': [codigo_cliente],
@@ -165,11 +179,6 @@ def run():
                             'Contato': [contact],
                             'Data_Cadastro': [data_cadastro]
                         })
-                        
-                        st.session_state['df_gold'] = pd.concat(
-                            [df, new_customer],
-                            ignore_index=True
-                        )
                         
                         st.success("Cliente cadastrado com sucesso!")
                         

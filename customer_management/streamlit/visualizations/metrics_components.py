@@ -2,7 +2,6 @@
 Module for metrics visualization components
 """
 import streamlit as st
-from datetime import datetime, timedelta
 import plotly.graph_objects as go
 
 def create_progress_indicator(value, max_value):
