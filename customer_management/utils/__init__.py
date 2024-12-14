@@ -16,7 +16,7 @@ from customer_management.utils.contains_emoji import contains_emoji
 
 from customer_management.utils.clean_data import clean_and_validate_data
 
-from customer_management.utils.layer_controller import run_data_pipeline
+from customer_management.controller.layer_controller import run_data_pipeline
 
 from customer_management.utils.transform_excel import convert_df_to_excel
 

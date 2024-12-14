@@ -2,21 +2,35 @@
 Module to extract data for the bronze layer
 """
 
+import logging
 import pandas as pd
 
-from sqlalchemy import text
+from customer_management.database.settings import engine
 
-from customer_management.database import engine
+logger = logging.getLogger(__name__)
 
 def bronze_customers():
     """
-    Extract data from the customers table and return it as a DataFrame.
+    Extracts raw data from the customers table.
     """
+    query = """
+        SELECT 
+            id,
+            name,
+            email,
+            contact,
+            country,
+            city,
+            neighborhood,
+            created_at
+        FROM customers
+        ORDER BY created_at DESC
+    """
+    
     try:
-        with engine.connect() as connection:
-            result = connection.execute(text("SELECT * FROM customers"))
-            df_customers = pd.DataFrame(result.fetchall(), columns=result.keys())
-        return df_customers
+        with engine.connect() as conn:
+            df = pd.read_sql(query, conn)
+            return df
     except Exception as e:
-        print(f"Error extracting data for the bronze layer: {e}")
+        logger.error(f"Error reading from database: {e}")
         return pd.DataFrame()
