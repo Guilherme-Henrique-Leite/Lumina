@@ -2,6 +2,8 @@
 Module to transform data from the bronze layer to the silver layer.
 """
 
+import pandas as pd
+
 from customer_management.utils import (
     check_object,
     contains_emoji,
@@ -22,11 +24,11 @@ def silver_customers(df_bronze):
     
     df_silver = clean_and_validate_data(df_bronze)
     
-    df_silver['email_domain'] = df_silver['email'].apply(lambda x: x.split('@')[-1])
+    df_silver['email_domain'] = df_silver['email'].apply(lambda x: x.split('@')[-1] if pd.notna(x) else None)
     
     object_columns = check_object(df_silver, df_silver.columns)
     df_silver = optimize_memory(df_silver, object_columns)
     
-    df_silver = df_silver[~df_silver['name'].apply(contains_emoji)]
+    df_silver = df_silver[~df_silver['name'].apply(lambda x: contains_emoji(x) if pd.notna(x) else False)]
     
     return df_silver
