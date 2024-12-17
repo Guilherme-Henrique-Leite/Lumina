@@ -1,8 +1,7 @@
 """
 Grid configuration module for data display settings.
 """
-from typing import Dict, Any
-from st_aggrid import AgGrid, GridOptionsBuilder
+from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode
 
 
 def configure_grid(df_filtered):
@@ -91,33 +90,98 @@ def configure_grid(df_filtered):
     return gb.build()
 
 
-def render_grid(df_filtered):
+def render_grid(df):
     """
-    Render grid with all original settings.
+    Renders an AG Grid with the provided DataFrame
     """
-    grid_options = configure_grid(df_filtered)
+    gb = GridOptionsBuilder.from_dataframe(df)
+    
+    gb.configure_default_column(
+        resizable=True,
+        filterable=False,
+        sortable=True,
+        editable=False,
+        suppressSizeToFit=False,
+        menuTabs=['generalMenuTab'],
+        suppressMenu=True
+    )
+    
+    column_configs = {
+        "Código Cliente": {"flex": 0.7},
+        "Nome": {"flex": 1.2},
+        "Email": {"flex": 1.5},
+        "Contato": {"flex": 1},
+        "País": {"flex": 0.8},
+        "Estado": {"flex": 0.8},
+        "Cidade": {"flex": 1},
+        "Bairro": {"flex": 1},
+        "created_at": {"flex": 1, "header_name": "Data de Cadastro"},
+        "Domínio": {"flex": 1}
+    }
+    
+    for col, config in column_configs.items():
+        header_name = config.get('header_name', col)
+        gb.configure_column(
+            col,
+            header_name=header_name,
+            filter=False,
+            menuTabs=['generalMenuTab'],
+            suppressMenu=True,
+            flex=config['flex'],
+            suppressSizeToFit=False,
+            resizable=True
+        )
+    
+    gb.configure_grid_options(
+        domLayout='normal',
+        rowHeight=40,
+        headerHeight=45,
+        enableRangeSelection=True,
+        suppressRowClickSelection=True,
+        pagination=True,
+        paginationAutoPageSize=False,
+        paginationPageSize=20,
+        suppressMenuHide=True,
+        suppressFilter=True,
+        suppressColumnVirtualisation=True,
+        suppressRowVirtualisation=True,
+    )
+    
+    grid_options = gb.build()
     
     return AgGrid(
-        df_filtered,
+        df,
         gridOptions=grid_options,
-        height=600,
-        width="100%",
-        theme="streamlit",
+        enable_enterprise_modules=False,
+        allow_unsafe_jscode=False,
+        update_mode=GridUpdateMode.SELECTION_CHANGED,
+        height=800,
         fit_columns_on_grid_load=True,
-        domLayout="autoHeight",
-        allow_unsafe_jscode=True,
+        theme='streamlit',
         custom_css={
-            ".ag-row-hover": {"background-color": "rgba(35, 2, 77, 0.9) !important"},
-            ".ag-header-cell-label": {"justify-content": "center"},
-            ".ag-row-selected": {"background-color": "rgba(35, 2, 77, 0.9) !important"},
-            ".ag-checkbox-checked": {"color": "#32CD32 !important"},
-            ".ag-checkbox-indeterminate": {"color": "#32CD32 !important"},
-            ".ag-checkbox-input-wrapper::after": {"color": "#32CD32 !important"},
-            ".ag-checkbox.ag-checked:after": {"color": "#32CD32 !important"},
-            ".ag-checkbox.ag-checked > .ag-checkbox-input-wrapper": {"color": "#32CD32 !important"},
-            ".ag-theme-streamlit .ag-checkbox-input-wrapper.ag-checked::after": {"color": "#32CD32 !important"},
-            ".ag-cell-focus": {"border-color": "rgba(35, 2, 77, 0.9) !important"},
-            ".ag-cell-range-selected": {"background-color": "rgba(35, 2, 77, 0.9) !important"},
-            ".ag-cell-range-selected-1": {"background-color": "rgba(35, 2, 77, 0.9) !important"}
+            "#gridToolBar": {"display": "none"},
+            ".ag-root-wrapper": {
+                "border": "1px solid rgba(255, 255, 255, 0.1)",
+                "border-radius": "4px",
+                "background-color": "transparent"
+            },
+            ".ag-header": {
+                "background-color": "transparent"
+            },
+            ".ag-row": {
+                "background-color": "transparent"
+            },
+            ".ag-row-even": {
+                "background-color": "rgba(255, 255, 255, 0.02)"
+            },
+            ".ag-row-odd": {
+                "background-color": "transparent"
+            },
+            ".ag-row-hover": {
+                "background-color": "rgba(11, 74, 11, 0.95) !important"
+            },
+            ".ag-header-cell-menu-button": {
+                "display": "none"
+            }
         }
     )
