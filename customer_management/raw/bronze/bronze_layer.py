@@ -20,6 +20,7 @@ def bronze_customers():
             email,
             contact,
             country,
+            state,
             city,
             neighborhood,
             created_at
