@@ -19,6 +19,7 @@ def gold_customers(df_silver):
         pd.DataFrame: Processed data with standardized country names, 
                      cleaned locations and proper formatting.
     """
+    
     initial_records = len(df_silver)
     df_gold = df_silver.copy()
     
@@ -30,24 +31,28 @@ def gold_customers(df_silver):
             'email_domain': 'Domínio',
             'contact': 'Contato',
             'country': 'País',
+            'state': 'Estado',
             'city': 'Cidade',
             'neighborhood': 'Bairro',
         },
         inplace=True,
     )
     
-    df_gold['País'] = df_gold['País'].apply(normalize_country_name)
-    
-    df_gold = df_gold.dropna(subset=['País', 'Cidade', 'Bairro'])
+    df_gold['País'] = df_gold['País'].fillna('')
+    df_gold['País'] = df_gold['País'].apply(
+        lambda x: normalize_country_name(x) if x and x.strip() != '' else x
+    )
     
     df_gold = df_gold[
-        (df_gold['Cidade'] != 'NULL') & (df_gold['Cidade'].str.strip() != '') &
-        (df_gold['Bairro'] != 'NULL') & (df_gold['Bairro'].str.strip() != '')
+        ~(
+            (df_gold['Cidade'].isna() | (df_gold['Cidade'] == '')) &
+            (df_gold['Bairro'].isna() | (df_gold['Bairro'] == ''))
+        )
     ]
     
-    df_gold['País'] = df_gold['País'].str.title()
-    df_gold['Cidade'] = df_gold['Cidade'].str.title()
-    df_gold['Bairro'] = df_gold['Bairro'].str.title()
+    df_gold['País'] = df_gold['País'].apply(lambda x: x.title() if x and x.strip() != '' else x)
+    df_gold['Cidade'] = df_gold['Cidade'].apply(lambda x: x.title() if x and x.strip() != '' else x)
+    df_gold['Bairro'] = df_gold['Bairro'].apply(lambda x: x.title() if x and x.strip() != '' else x)
     
     final_records = len(df_gold)
     removed_records = initial_records - final_records
