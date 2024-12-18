@@ -5,7 +5,8 @@ Module to register pages
 from customer_management.streamlit.pages import (
     customer_panel,
     overview,
-    customer_registration
+    customer_registration,
+    admin_settings
 )
 
 
@@ -22,4 +23,5 @@ def get_pages():
         "Painel de Clientes": customer_panel.run,
         "Visualização Gráfica": graphic_visualization.run,
         "Cadastro de Clientes": customer_registration.run,
+        "Configurações": admin_settings.run,
     }
