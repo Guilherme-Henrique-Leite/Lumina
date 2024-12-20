@@ -60,6 +60,3 @@ The project follows a layered architecture to process data incrementally and org
 - Improve the homepage and data visualization.
 - Create a page to create and manage customers.
 - Write tests for the pipeline.
-
-## Contributions
-Feel free to open issues or pull requests for improvements!
