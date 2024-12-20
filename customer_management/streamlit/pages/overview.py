@@ -6,9 +6,9 @@ import time
 
 from customer_management.utils import load_css
 from customer_management.utils import run_data_pipeline
+from customer_management.streamlit.visualizations.metrics_components import render_progress_section
 
 from customer_management.streamlit.visualizations import (
-    render_progress_section,
     render_metric_cards,
     render_statistics,
     create_trend_chart
