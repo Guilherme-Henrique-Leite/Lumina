@@ -52,7 +52,8 @@ The project follows a layered architecture to process data incrementally and org
 4. Run the pipeline:
     - Use the `app.py` file to execute the pipeline or visualize the data with Streamlit:
     ```bash
-    streamlit run app.py
+    cd customer-management 
+    run following commands: streamlit run app.py or task run
     ```
 
 ## Next Steps
