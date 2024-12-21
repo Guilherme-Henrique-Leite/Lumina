@@ -58,5 +58,4 @@ The project follows a layered architecture to process data incrementally and org
 ## Next Steps
 - Create visualizations and reports in Streamlit.
 - Improve the homepage and data visualization.
-- Create a page to create and manage customers.
 - Write tests for the pipeline.
