@@ -11,8 +11,7 @@
       }
     },
     "forwardPorts": [
-      8000,
-      5432
+      8000
     ],
     "postCreateCommand": "pip install poetry",
     "customizations": {
