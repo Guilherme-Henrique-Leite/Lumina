@@ -32,7 +32,6 @@ The project follows a layered architecture to process data incrementally and org
 1. Clone the repository:
     ```bash
     git clone <REPOSITORY_URL>
-    cd customer-management
     ```
 
 2. Install dependencies with Poetry:
