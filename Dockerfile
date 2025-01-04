@@ -4,7 +4,8 @@ ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     POETRY_VERSION=1.7.1 \
     POETRY_HOME="/opt/poetry" \
-    POETRY_VIRTUALENVS_CREATE=false
+    POETRY_VIRTUALENVS_CREATE=false \
+    PYTHONPATH="/app"
 
 ENV PATH="$POETRY_HOME/bin:$PATH"
 
@@ -19,12 +20,14 @@ RUN curl -sSL https://install.python-poetry.org | python3 -
 
 WORKDIR /app
 
-COPY pyproject.toml poetry.lock ./
+COPY . .
 
 RUN poetry install --no-interaction --no-ansi
 
-COPY . .
+RUN mkdir -p /app/customer_management/raw/bronze \
+    && touch /app/customer_management/raw/bronze/__init__.py \
+    && touch /app/customer_management/raw/__init__.py
 
 EXPOSE 8501
 
-CMD ["poetry", "run", "streamlit", "run", "app.py"] 
+CMD ["poetry", "run", "streamlit", "run", "customer_management/app.py"] 
