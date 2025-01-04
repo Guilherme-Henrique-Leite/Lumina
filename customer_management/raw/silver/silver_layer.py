@@ -2,8 +2,9 @@
 Module to transform data from the bronze layer to the silver layer.
 """
 
+import re
+import logging
 import pandas as pd
-
 from customer_management.utils import (
     check_object,
     contains_emoji,
@@ -11,35 +12,23 @@ from customer_management.utils import (
     clean_and_validate_data,
 )
 
+logger = logging.getLogger(__name__)
 def silver_customers(df_bronze):
     """
-    Transforms raw customer data (Bronze layer) into a clean and optimized dataset.
-
-    Args:
-        df_bronze(pd.DataFrame): Raw data from the Bronze layer.
-
-    Returns:
-        pd.DataFrame: A transformed DataFrame ready for the Silver layer.
+    Processa os dados da camada bronze para silver
     """
+    logger.info("Processing Silver layer...")
     
-    df_silver = clean_and_validate_data(df_bronze)
+    df_silver = df_bronze.copy()
     
-    location_columns = ['country', 'state', 'city', 'neighborhood']
-    for col in location_columns:
-        df_silver[col] = df_silver[col].apply(
-            lambda x: x.strip() if isinstance(x, str) else x
-        )
-        df_silver[col] = df_silver[col].replace('', None)
+    df_silver['email_domain'] = df_silver['email'].apply(lambda x: x.split('@')[-1] if pd.notna(x) else None)
     
-    df_silver['email_domain'] = df_silver['email'].apply(
-        lambda x: x.split('@')[-1] if pd.notna(x) else None
-    )
+    df_silver['contact'] = df_silver['contact'].apply(lambda x: re.sub(r'\D', '', str(x)) if pd.notna(x) else None)
     
-    object_columns = check_object(df_silver, df_silver.columns)
-    df_silver = optimize_memory(df_silver, object_columns)
+    text_columns = ['name', 'email', 'country', 'state', 'city', 'neighborhood']
+    for col in text_columns:
+        if col in df_silver.columns:
+            df_silver[col] = df_silver[col].apply(lambda x: x.strip().title() if isinstance(x, str) else x)
     
-    df_silver = df_silver[~df_silver['name'].apply(
-        lambda x: contains_emoji(x) if pd.notna(x) else False
-    )]
-    
+    logger.info("Silver layer completed.")
     return df_silver
