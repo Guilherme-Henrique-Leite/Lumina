@@ -56,5 +56,5 @@ The project follows a layered architecture to process data incrementally and org
     ```
 
 ## Next Steps
-- Improve the homepage and data visualization.
+- Create Admin module
 - Write tests for the pipeline.
