@@ -1,23 +1,30 @@
 FROM python:3.12-slim
 
-WORKDIR /app
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    POETRY_VERSION=1.7.1 \
+    POETRY_HOME="/opt/poetry" \
+    POETRY_VIRTUALENVS_CREATE=false
 
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    curl \
-    software-properties-common \
-    libpq-dev \
+ENV PATH="$POETRY_HOME/bin:$PATH"
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        curl \
+        build-essential \
+        libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl -sSL https://install.python-poetry.org | python3 -
 
-COPY pyproject.toml poetry.lock ./
-COPY customer_management/ ./customer_management/
-COPY .env ./
+WORKDIR /app
 
-RUN poetry config virtualenvs.create false \
-    && poetry install --no-interaction --no-ansi
+COPY pyproject.toml poetry.lock ./
+
+RUN poetry install --no-interaction --no-ansi
+
+COPY . .
 
 EXPOSE 8501
 
-CMD ["poetry", "run", "streamlit", "run", "customer_management/app.py", "--server.port=8501", "--server.address=0.0.0.0"] 
+CMD ["poetry", "run", "streamlit", "run", "app.py"] 
