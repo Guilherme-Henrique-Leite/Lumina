@@ -4,6 +4,9 @@ Database connection settings
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.engine import URL
+from dotenv import load_dotenv
+
+load_dotenv()
 
 required_env_vars = ['DB_USER', 'DB_PASSWORD', 'DB_HOST', 'DB_PORT', 'DATABASE']
 missing_vars = [var for var in required_env_vars if not os.getenv(var)]
