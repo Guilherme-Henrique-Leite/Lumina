@@ -410,6 +410,9 @@ def run():
             quartis = pais_counts.quantile([0.25, 0.5, 0.75])
             
             def determinar_segmento(pais):
+                if pd.isna(pais):
+                    return 'Não Classificado'
+                
                 count = pais_counts[pais]
                 if count <= quartis[0.25]:
                     return 'Bronze'
@@ -430,7 +433,8 @@ def run():
                     'Platina': '#E5E4E2',
                     'Ouro': '#FFD700',
                     'Prata': '#A7A7AD',
-                    'Bronze': '#CD7F32'
+                    'Bronze': '#CD7F32',
+                    'Não Classificado': '#808080'
                 },
                 template="plotly_dark"
             )

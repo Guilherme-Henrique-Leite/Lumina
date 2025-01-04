@@ -91,9 +91,7 @@ def configure_grid(df_filtered):
 
 
 def render_grid(df):
-    """
-    Renders an AG Grid with the provided DataFrame
-    """
+    """Render grid without spinner"""
     gb = GridOptionsBuilder.from_dataframe(df)
     
     gb.configure_default_column(
