@@ -5,7 +5,7 @@ ENV PYTHONUNBUFFERED=1 \
     POETRY_VERSION=1.7.1 \
     POETRY_HOME="/opt/poetry" \
     POETRY_VIRTUALENVS_CREATE=false \
-    PYTHONPATH="/app"
+    PYTHONPATH="/workspace"
 
 ENV PATH="$POETRY_HOME/bin:$PATH"
 
@@ -18,15 +18,11 @@ RUN apt-get update \
 
 RUN curl -sSL https://install.python-poetry.org | python3 -
 
-WORKDIR /app
+WORKDIR /workspace
 
 COPY . .
 
 RUN poetry install --no-interaction --no-ansi
-
-RUN mkdir -p /app/customer_management/raw/bronze \
-    && touch /app/customer_management/raw/bronze/__init__.py \
-    && touch /app/customer_management/raw/__init__.py
 
 EXPOSE 8501
 
