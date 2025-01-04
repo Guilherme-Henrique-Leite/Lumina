@@ -6,8 +6,6 @@ import streamlit as st
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import URL
 
-
-
 def get_config_value(key):
     """Get configuration from either Streamlit secrets or environment variables"""
     try:
