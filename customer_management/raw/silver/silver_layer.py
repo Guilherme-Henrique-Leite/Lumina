@@ -24,11 +24,22 @@ def silver_customers(df_bronze):
     
     df_silver = clean_and_validate_data(df_bronze)
     
-    df_silver['email_domain'] = df_silver['email'].apply(lambda x: x.split('@')[-1] if pd.notna(x) else None)
+    location_columns = ['country', 'state', 'city', 'neighborhood']
+    for col in location_columns:
+        df_silver[col] = df_silver[col].apply(
+            lambda x: x.strip() if isinstance(x, str) else x
+        )
+        df_silver[col] = df_silver[col].replace('', None)
+    
+    df_silver['email_domain'] = df_silver['email'].apply(
+        lambda x: x.split('@')[-1] if pd.notna(x) else None
+    )
     
     object_columns = check_object(df_silver, df_silver.columns)
     df_silver = optimize_memory(df_silver, object_columns)
     
-    df_silver = df_silver[~df_silver['name'].apply(lambda x: contains_emoji(x) if pd.notna(x) else False)]
+    df_silver = df_silver[~df_silver['name'].apply(
+        lambda x: contains_emoji(x) if pd.notna(x) else False
+    )]
     
     return df_silver

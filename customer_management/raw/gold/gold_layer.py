@@ -2,6 +2,7 @@
 Module to transform data from the silver layer to the gold layer.
 """
 import logging
+import pandas as pd
 
 from customer_management.utils.normalize_country_names import normalize_country_name
 
@@ -38,21 +39,21 @@ def gold_customers(df_silver):
         inplace=True,
     )
     
-    df_gold['País'] = df_gold['País'].fillna('')
     df_gold['País'] = df_gold['País'].apply(
-        lambda x: normalize_country_name(x) if x and x.strip() != '' else x
+        lambda x: normalize_country_name(x).title() if pd.notna(x) and normalize_country_name(x) is not None else None
     )
+    
+    for col in ['Estado', 'Cidade', 'Bairro']:
+        df_gold[col] = df_gold[col].apply(
+            lambda x: x.title() if pd.notna(x) and x is not None else None
+        )
     
     df_gold = df_gold[
         ~(
-            (df_gold['Cidade'].isna() | (df_gold['Cidade'] == '')) &
-            (df_gold['Bairro'].isna() | (df_gold['Bairro'] == ''))
+            df_gold['Cidade'].isna() & 
+            df_gold['Bairro'].isna()
         )
     ]
-    
-    df_gold['País'] = df_gold['País'].apply(lambda x: x.title() if x and x.strip() != '' else x)
-    df_gold['Cidade'] = df_gold['Cidade'].apply(lambda x: x.title() if x and x.strip() != '' else x)
-    df_gold['Bairro'] = df_gold['Bairro'].apply(lambda x: x.title() if x and x.strip() != '' else x)
     
     final_records = len(df_gold)
     removed_records = initial_records - final_records
