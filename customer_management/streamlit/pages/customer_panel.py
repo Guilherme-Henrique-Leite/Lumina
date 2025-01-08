@@ -1,7 +1,6 @@
 """
 Module to display all data
 """
-import time
 import pandas as pd
 
 import streamlit as st
@@ -19,215 +18,145 @@ def get_sorted_unique_values(df, column):
     values = [x for x in values if pd.notna(x)]
     return sorted(values)
 
-def get_session_id():
-    """Generate a unique session ID for the current page view"""
-    if 'last_page' not in st.session_state:
-        st.session_state.last_page = 'panel'
-    elif st.session_state.last_page != 'panel':
-        if 'page_session_id' in st.session_state:
-            del st.session_state.page_session_id
-        st.session_state.last_page = 'panel'
-    
-    if 'page_session_id' not in st.session_state:
-        st.session_state.page_session_id = str(int(time.time()))
-    
-    return st.session_state.page_session_id
-
-@st.cache_data(ttl=None)
-def run_cached_pipeline(session_id):
-    """
-    Cached version of data pipeline
-    The session_id parameter ensures new cache when returning to page
-    """
-    return run_data_pipeline()
-
-def apply_filters(df, filters):
-    """Apply filters efficiently using query strings"""
-    query_parts = []
-    query_params = {}
-    
-    for column, values in filters.items():
-        if values and len(values) > 0:
-            param_name = f"filter_{column.lower().replace(' ', '_')}"
-            query_parts.append(f"`{column}` in @{param_name}")
-            query_params[param_name] = values
-    
-    if query_parts:
-        return df.query(" and ".join(query_parts), local_dict=query_params)
-    return df
-
-def load_css():
-    st.markdown("""
-        <style>
-        .stSpinner > div {
-            text-align: center;
-            font-size: 1.2rem;
-            color: #4CAF50;
-        }
-        </style>
-    """, unsafe_allow_html=True)
-
 def run():
-    """Function to run overview in display"""
+    """
+    Function to run overview in display
+    """
+
     load_css()
     st.title("Painel de Clientes")
     
-    session_id = get_session_id()
+    if 'full_dataframe' not in st.session_state:
+        st.session_state['full_dataframe'] = run_data_pipeline()
     
-    with st.spinner('📊 Preparando visualização dos dados...'):
-        df = run_cached_pipeline(session_id)
+    df = st.session_state['full_dataframe']
+    
+    def clear_filters():
+        keys_to_clear = [
+            'filter_client_code', 'filter_name', 'filter_country',
+            'filter_state', 'filter_city', 'filter_neighborhood',
+            'filter_date_start', 'filter_date_end'
+        ]
+        for key in keys_to_clear:
+            if key in st.session_state:
+                del st.session_state[key]
+    
+    st.header("Dados Gerais")
+    
+    df_filtered = st.session_state['full_dataframe'].copy()
+    
+    with st.expander("Filtros", expanded=False):
+        col1, col2, col3, col4, col5 = st.columns(5)
         
-        st.header("Dados Gerais")
-        df_filtered = df
+        with col1:
+            filter_client_code = st.multiselect(
+                "Código Cliente:",
+                options=get_sorted_unique_values(df, 'Código Cliente'),
+                default=None,
+                key='filter_client_code'
+            )
+            if filter_client_code:
+                df_filtered = df_filtered[df_filtered['Código Cliente'].isin(filter_client_code)]
         
-        with st.expander("Filtros", expanded=False):
-            filters = {}
+        with col2:
+            filter_name = st.multiselect(
+                "Nome:",
+                options=get_sorted_unique_values(df_filtered, 'Nome'),
+                default=None,
+                key='filter_name'
+            )
+            if filter_name:
+                df_filtered = df_filtered[df_filtered['Nome'].isin(filter_name)]
+        
+        with col3:
+            filter_country = st.multiselect(
+                "País:",
+                options=get_sorted_unique_values(df_filtered, 'País'),
+                default=None,
+                key='filter_country'
+            )
+            if filter_country:
+                df_filtered = df_filtered[df_filtered['País'].isin(filter_country)]
+        
+        with col4:
+            filter_state = st.multiselect(
+                "Estado:",
+                options=get_sorted_unique_values(df_filtered, 'Estado'),
+                default=None,
+                key='filter_state'
+            )
+            if filter_state:
+                df_filtered = df_filtered[df_filtered['Estado'].isin(filter_state)]
+        
+        with col5:
+            filter_city = st.multiselect(
+                "Cidade:",
+                options=get_sorted_unique_values(df_filtered, 'Cidade'),
+                default=None,
+                key='filter_city'
+            )
+            if filter_city:
+                df_filtered = df_filtered[df_filtered['Cidade'].isin(filter_city)]
+        
+        col6, col7, col8, col9, col10 = st.columns(5)
+        
+        with col6:
+            filter_neighborhood = st.multiselect(
+                "Bairro:",
+                options=get_sorted_unique_values(df_filtered, 'Bairro'),
+                default=None,
+                key='filter_neighborhood'
+            )
+            if filter_neighborhood:
+                df_filtered = df_filtered[df_filtered['Bairro'].isin(filter_neighborhood)]
+        
+        with col7, col8:
+            df_filtered['created_at'] = pd.to_datetime(df_filtered['created_at'])
             
-            col1, col2, col3, col4, col5 = st.columns(5)
+            min_date = df_filtered['created_at'].min().date()
+            max_date = df_filtered['created_at'].max().date()
             
-            with col1:
-                filter_client_code = st.multiselect(
-                    "Código Cliente:",
-                    options=get_sorted_unique_values(df, 'Código Cliente'),
-                    default=None,
-                    key='filter_client_code'
+            date_col1, date_col2 = col7, col8
+            with date_col1:
+                start_date = st.date_input(
+                    "Data Inicial:",
+                    value=min_date,
+                    min_value=min_date,
+                    max_value=max_date,
+                    key='filter_date_start',
+                    format="DD/MM/YYYY"
                 )
-                if filter_client_code:
-                    filters['Código Cliente'] = filter_client_code
             
-            with col2:
-                available_names = get_sorted_unique_values(
-                    df_filtered if not filters else apply_filters(df, filters),
-                    'Nome'
+            with date_col2:
+                end_date = st.date_input(
+                    "Data Final:",
+                    value=max_date,
+                    min_value=min_date,
+                    max_value=max_date,
+                    key='filter_date_end',
+                    format="DD/MM/YYYY"
                 )
-                filter_name = st.multiselect(
-                    "Nome:",
-                    options=available_names,
-                    default=None,
-                    key='filter_name'
-                )
-                if filter_name:
-                    filters['Nome'] = filter_name
             
-            with col3:
-                filter_country = st.multiselect(
-                    "País:",
-                    options=get_sorted_unique_values(df_filtered, 'País'),
-                    default=None,
-                    key='filter_country'
-                )
-                if filter_country:
-                    filters['País'] = filter_country
-            
-            with col4:
-                filter_state = st.multiselect(
-                    "Estado:",
-                    options=get_sorted_unique_values(df_filtered, 'Estado'),
-                    default=None,
-                    key='filter_state'
-                )
-                if filter_state:
-                    filters['Estado'] = filter_state
-            
-            with col5:
-                filter_city = st.multiselect(
-                    "Cidade:",
-                    options=get_sorted_unique_values(df_filtered, 'Cidade'),
-                    default=None,
-                    key='filter_city'
-                )
-                if filter_city:
-                    filters['Cidade'] = filter_city
-            
-            col6, col7, col8, col9, col10 = st.columns(5)
-            
-            with col6:
-                filter_neighborhood = st.multiselect(
-                    "Bairro:",
-                    options=get_sorted_unique_values(df_filtered, 'Bairro'),
-                    default=None,
-                    key='filter_neighborhood'
-                )
-                if filter_neighborhood:
-                    filters['Bairro'] = filter_neighborhood
-            
-            with col7, col8:
-                df_filtered['created_at'] = pd.to_datetime(df_filtered['created_at'])
-                
-                min_date = df_filtered['created_at'].min().date()
-                max_date = df_filtered['created_at'].max().date()
-                
-                date_col1, date_col2 = col7, col8
-                with date_col1:
-                    start_date = st.date_input(
-                        "Data Inicial:",
-                        value=min_date,
-                        min_value=min_date,
-                        max_value=max_date,
-                        key='filter_date_start',
-                        format="DD/MM/YYYY"
-                    )
-                
-                with date_col2:
-                    end_date = st.date_input(
-                        "Data Final:",
-                        value=max_date,
-                        min_value=min_date,
-                        max_value=max_date,
-                        key='filter_date_end',
-                        format="DD/MM/YYYY"
-                    )
-                
-                if start_date and end_date:
-                    mask = (df_filtered['created_at'].dt.date >= start_date) & (df_filtered['created_at'].dt.date <= end_date)
-                    df_filtered = df_filtered[mask]
-            
-            if filters:
-                df_filtered = apply_filters(df, filters)
-            
-            if 'filter_date_start' in st.session_state or 'filter_date_end' in st.session_state:
-                date_mask = (
-                    (df_filtered['created_at'].dt.date >= st.session_state.get('filter_date_start', df_filtered['created_at'].min().date())) &
-                    (df_filtered['created_at'].dt.date <= st.session_state.get('filter_date_end', df_filtered['created_at'].max().date()))
-                )
-                df_filtered = df_filtered[date_mask]
+            if start_date and end_date:
+                mask = (df_filtered['created_at'].dt.date >= start_date) & (df_filtered['created_at'].dt.date <= end_date)
+                df_filtered = df_filtered[mask]
+        
+        if st.button("Limpar Filtros"):
+            df_filtered = df.copy()
+            clear_filters()
+            st.rerun()
 
-            def has_active_filters():
-                filter_keys = [
-                    'filter_client_code', 'filter_name', 'filter_country',
-                    'filter_state', 'filter_city', 'filter_neighborhood'
-                ]
-                has_multiselect_filters = any(
-                    st.session_state.get(key, []) for key in filter_keys
-                )
-                
-                default_start = df['created_at'].min().date()
-                default_end = df['created_at'].max().date()
-                has_date_filters = (
-                    st.session_state.get('filter_date_start', default_start) != default_start or
-                    st.session_state.get('filter_date_end', default_end) != default_end
-                )
-                
-                return has_multiselect_filters or has_date_filters
+    if df_filtered.empty:
+        st.warning("Nenhum dado encontrado com os filtros selecionados.")
+    else:
+        render_grid(df_filtered)
 
-            if st.button("Limpar Filtros"):
-                if has_active_filters():
-                    st.session_state.needs_reset = True
-                    st.rerun()
-                else:
-                    st.info("Não há filtros ativos para limpar.")
-
-        if df_filtered.empty:
-            st.warning("Nenhum dado encontrado com os filtros selecionados.")
-        else:
-            render_grid(df_filtered)
-            
-            col_download, _ = st.columns([1, 4])
-            with col_download:
-                excel_data = convert_df_to_excel(df_filtered)
-                st.download_button(
-                    label="📥 Baixar Excel",
-                    data=excel_data,
-                    file_name="dados_clientes.xlsx",
-                    mime="application/vnd.ms-excel"
-                )
+        col_download, _ = st.columns([1, 4])
+        with col_download:
+            excel_data = convert_df_to_excel(df_filtered)
+            st.download_button(
+                label="📥 Baixar Excel",
+                data=excel_data,
+                file_name="dados_clientes.xlsx",
+                mime="application/vnd.ms-excel"
+            )

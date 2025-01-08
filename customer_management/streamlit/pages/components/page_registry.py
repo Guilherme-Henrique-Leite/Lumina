@@ -23,5 +23,5 @@ def get_pages():
         "Painel de Clientes": customer_panel.run,
         "Visualização Gráfica": graphic_visualization.run,
         "Cadastro de Clientes": customer_registration.run,
-        "Configurações": admin_settings.run,
+      #"Configurações": admin_settings.run,
     }
