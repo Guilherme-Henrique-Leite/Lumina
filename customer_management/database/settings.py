@@ -3,14 +3,21 @@ Module to connect to the PostgreSQL database
 """
 
 import os
+import streamlit as st
 from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
 
-DB_HOST = os.getenv("DB_HOST")
-DB_USER = os.getenv("DB_USER")
-DB_PASS = os.getenv("DB_PASSWORD")
-DB_NAME = os.getenv("DATABASE")
-DB_PORT = os.getenv("DB_PORT", "5432")
+
+def get_config(key: str) -> str:
+    if hasattr(st, "secrets"):
+        return st.secrets.get(key)
+    return os.getenv(key)
+
+DB_HOST = get_config("DB_HOST")
+DB_USER = get_config("DB_USER")
+DB_PASS = get_config("DB_PASSWORD")
+DB_NAME = get_config("DATABASE")
+DB_PORT = get_config("DB_PORT")
 
 HANDLER_CONNECTION = f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
