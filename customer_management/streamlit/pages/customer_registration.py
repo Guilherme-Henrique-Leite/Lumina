@@ -92,6 +92,8 @@ def clear_form():
 
 def run():
     """Function to run customer registration page"""
+    st.session_state.last_page = 'registration'
+    
     st.title("Cadastro de Clientes")
     
     col1, col2 = st.columns(2)
