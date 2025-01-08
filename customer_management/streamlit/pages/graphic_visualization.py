@@ -1,12 +1,15 @@
 """
 Module to display graphical visualizations
 """
-import streamlit as st
+import pytz
+from datetime import datetime
+
 import pandas as pd
+import streamlit as st
+
 import plotly.express as px
 import plotly.graph_objects as go
-from datetime import datetime
-import pytz
+
 
 def run():
     """
@@ -410,15 +413,20 @@ def run():
             quartis = pais_counts.quantile([0.25, 0.5, 0.75])
             
             def determinar_segmento(pais):
-                count = pais_counts[pais]
-                if count <= quartis[0.25]:
-                    return 'Bronze'
-                elif count <= quartis[0.5]:
-                    return 'Prata'
-                elif count <= quartis[0.75]:
-                    return 'Ouro'
-                else:
-                    return 'Platina'
+                if pd.isna(pais):
+                    return 'Não Classificado'
+                try:
+                    count = pais_counts[pais]
+                    if count <= quartis[0.25]:
+                        return 'Bronze'
+                    elif count <= quartis[0.5]:
+                        return 'Prata'
+                    elif count <= quartis[0.75]:
+                        return 'Ouro'
+                    else:
+                        return 'Platina'
+                except:
+                    return 'Não Classificado'
             
             df['Segmento'] = df['País'].apply(determinar_segmento)
             

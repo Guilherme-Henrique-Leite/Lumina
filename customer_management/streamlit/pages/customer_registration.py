@@ -28,6 +28,9 @@ def save_customer_to_db(customer_data):
             id = result.fetchone()[0]
             conn.commit()
             
+        if 'full_dataframe' in st.session_state:
+            del st.session_state['full_dataframe']
+            
         return id, None
     except Exception as e:
         return None, str(e)

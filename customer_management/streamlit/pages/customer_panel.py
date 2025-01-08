@@ -26,7 +26,10 @@ def run():
     load_css()
     st.title("Painel de Clientes")
     
-    df = run_data_pipeline()
+    if 'full_dataframe' not in st.session_state:
+        st.session_state['full_dataframe'] = run_data_pipeline()
+    
+    df = st.session_state['full_dataframe']
     
     def clear_filters():
         keys_to_clear = [
@@ -40,7 +43,7 @@ def run():
     
     st.header("Dados Gerais")
     
-    df_filtered = df.copy()
+    df_filtered = st.session_state['full_dataframe'].copy()
     
     with st.expander("Filtros", expanded=False):
         col1, col2, col3, col4, col5 = st.columns(5)
