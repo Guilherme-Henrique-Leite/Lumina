@@ -21,12 +21,13 @@ def bronze_customers():
             name,
             email,
             contact,
-            country,
-            state,
-            city,
-            neighborhood,
+            NULLIF(TRIM(country), '') as country,
+            NULLIF(TRIM(state), '') as state,
+            NULLIF(TRIM(city), '') as city,
+            NULLIF(TRIM(neighborhood), '') as neighborhood,
             created_at
         FROM customers
+        WHERE name != 'SYSTEM_LOCATION'  -- Exclui registros do sistema
         ORDER BY created_at DESC
     """
     
