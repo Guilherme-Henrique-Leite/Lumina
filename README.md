@@ -1,6 +1,6 @@
 # Customer Management
 
-**Status**: In progress 🚧
+**Status**: In progress... 🚧
 
 This is a customer management project developed using Python and a layered architecture (Bronze, Silver, Gold) to organize and process data efficiently. The main goal is to create a robust pipeline for managing and analyzing customer information.
 
@@ -58,3 +58,4 @@ The project follows a layered architecture to process data incrementally and org
 ## Next Steps
 - Create Admin module
 - Write tests for the pipeline.
+- Deploy application.
