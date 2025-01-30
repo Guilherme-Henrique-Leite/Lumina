@@ -25,17 +25,22 @@ jobs:
     - name: Test database
       run: |
         python -c "
+        import sys
+        import os
+        sys.path.append(os.path.abspath('.'))
         from customer_management.database.settings import engine
+        
         with engine.connect() as conn:
             result = conn.execute('SELECT COUNT(*) FROM customers').scalar()
-            print(f'Found {result} records in database')
+            print(f'Registros encontrados: {result}')
+            assert result >= 5, 'Database should have at least 5 initial records'
         "
     
     - name: Test app
       run: |
         streamlit run app.py &
         sleep 5
-        curl http://localhost:8501
+        curl -s http://localhost:8501 > /dev/null
 
   deploy:
     needs: test
