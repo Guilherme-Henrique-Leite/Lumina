@@ -3,6 +3,7 @@ Module to run Streamlit Page
 """
 import streamlit as st
 
+
 from customer_management.streamlit.pages import render_sidebar
 from customer_management.streamlit.pages import get_pages
 

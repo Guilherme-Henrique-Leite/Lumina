@@ -1,0 +1,62 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install flake8 pytest
+        
+    - name: Lint with flake8
+      run: |
+        # Pare se houver erros de sintaxe ou undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # Avisos de estilo de código
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        
+    - name: Test Database Initialization
+      run: |
+        python -c "
+        from customer_management.database.settings import engine, init_db
+        init_db(engine)
+        with engine.connect() as conn:
+            result = conn.execute('SELECT COUNT(*) FROM customers').scalar()
+            assert result > 0, 'Database should have initial records'
+        "
+        
+    - name: Test Streamlit App
+      run: |
+        timeout 10s streamlit run app.py &
+        sleep 5
+        curl -f http://localhost:8501 || exit 1
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+    - name: Deploy to Streamlit
+      run: |
+        echo "🚀 Deploy automático configurado!"
+        echo "Configure o deploy no Streamlit Cloud:"
+        echo "1. Vá para https://share.streamlit.io"
+        echo "2. Conecte este repositório"
+        echo "3. Configure app.py como arquivo principal" 

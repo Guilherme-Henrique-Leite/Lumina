@@ -1,14 +1,20 @@
 CREATE TABLE IF NOT EXISTS customers (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255),
-    email VARCHAR(255),
-    contact VARCHAR(20),
-    country VARCHAR(100),
-    state VARCHAR(100),
-    city VARCHAR(100),
-    neighborhood VARCHAR(100),
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    contact TEXT NOT NULL,
+    country TEXT NOT NULL,
+    state TEXT,
+    city TEXT NOT NULL,
+    neighborhood TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+INSERT OR IGNORE INTO customers 
+(name, email, contact, country, state, city, neighborhood, created_at)
+VALUES
+('Lucas Pereira', 'lucas.p@email.com', '+5511923456789', 'Brasil', 'São Paulo', 'São Paulo', 'Vila Olímpia', '2024-11-01'),
+('Carolina Santos', 'carolina.s@email.com', '+351890123456', 'Portugal', NULL, 'Porto', 'Cedofeita', '2024-11-01');
 
 INSERT INTO customers (name, email, contact, country, state, city, neighborhood, created_at) VALUES 
 -- January
@@ -82,8 +88,6 @@ INSERT INTO customers (name, email, contact, country, state, city, neighborhood,
 ('Marie Laurent', 'marie.l@email.com', '+33890123456', 'França', 'Bordeaux', 'Bordeaux', 'Saint-Pierre', '2024-10-30'),
 
 -- November
-('Lucas Pereira', 'lucas.p@email.com', '+5511923456789', 'Brasil', 'São Paulo', 'São Paulo', 'Vila Olímpia', '2024-11-01'),
-('Carolina Santos', 'carolina.s@email.com', '+351890123456', 'Portugal', 'Porto', 'Porto', 'Cedofeita', '2024-11-01'),
 ('Ramon Garcia', 'ramon.g@email.com', '+34699000111', 'Espanha', 'Madrid', 'Madrid', 'La Latina', '2024-11-15'),
 ('Andrea Marino', 'andrea.m@email.com', '+39345678908', 'Itália', 'Veneza', 'Veneza', 'Dorsoduro', '2024-11-15'),
 ('Sophie Petit', 'sophie.p@email.com', '+33901234567', 'França', 'Lyon', 'Lyon', 'Croix-Rousse', '2024-11-30'),

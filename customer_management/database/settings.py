@@ -1,18 +1,25 @@
 """
-Module to connect to the PostgreSQL database
+Module to connect to the SQLite database
 """
 
 import os
+from sqlalchemy import create_engine, text
 import streamlit as st
-from sqlalchemy import create_engine
 
-def get_connection_string() -> str:
-    if hasattr(st, "secrets"):
-        return st.secrets["NEON_DATABASE_URL"]
-    return os.getenv("NEON_DATABASE_URL")
+def init_db(engine):
+    """Initialize database with init.sql"""
+    with engine.connect() as conn:
+        with open("customer_management/database/init.sql") as file:
+            for stmt in file.read().split(';'):
+                if stmt.strip():
+                    conn.execute(text(stmt.strip()))
+            conn.commit()
 
-try:
-    HANDLER_CONNECTION = get_connection_string()
-    engine = create_engine(HANDLER_CONNECTION)
-except Exception as e:
-    print(f"Error connecting to database: {str(e)}")
+def get_engine():
+    if st.secrets.get("postgres"):
+        return create_engine(st.secrets.postgres.url)
+    return create_engine("sqlite:///local.db")
+
+# Inicialização do banco
+engine = get_engine()
+init_db(engine)
