@@ -23,7 +23,7 @@ jobs:
     
     - name: Test app
       run: |
-        streamlit run app.py &
+        streamlit run customer_management/app.py &
         sleep 5
         curl -s http://localhost:8501 > /dev/null
 

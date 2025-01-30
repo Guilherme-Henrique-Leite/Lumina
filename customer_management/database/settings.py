@@ -3,36 +3,34 @@ Module to connect to the SQLite database
 """
 
 import os
-import streamlit as st
 from sqlalchemy import create_engine, text
+import logging
+
+logger = logging.getLogger(__name__)
+
+def get_database_url():
+    """Get database URL from environment or use default SQLite"""
+    return os.getenv('DATABASE_URL', 'sqlite:///customer_management.db')
+
+
+engine = create_engine(get_database_url())
+
+def get_connection():
+    """Get database connection"""
+    return engine.connect()
+
+HANDLER_CONNECTION = get_connection
 
 def init_db(engine):
-    """Initialize database with init.sql"""
+    """Initialize database with schema and initial data"""
+    with open('customer_management/database/init.sql', 'r', encoding='utf-8') as f:
+        sql_script = f.read()
+        
     with engine.connect() as conn:
-        with open("customer_management/database/init.sql") as file:
-            statements = file.read().split(';')
-            for stmt in statements:
-                if stmt.strip():
-                    conn.execute(text(stmt.strip()))
-            conn.commit()
+        for stmt in sql_script.split(';'):
+            if stmt.strip():
+                conn.execute(text(stmt.strip()))
+                conn.commit()
 
-def get_engine():
-    """Get database engine based on environment"""
-    if os.getenv('GITHUB_ACTIONS'):
-        return create_engine('sqlite:///local_database.db')
-    
-    try:
-        if st.secrets.get("postgres"):
-            return create_engine(
-                f"postgresql://{st.secrets.postgres.user}:{st.secrets.postgres.password}"
-                f"@{st.secrets.postgres.host}:{st.secrets.postgres.port}/{st.secrets.postgres.dbname}"
-            )
-    except:
-        pass
-    
-    return create_engine('sqlite:///local_database.db')
-
-engine = get_engine()
-
-if os.getenv('GITHUB_ACTIONS') or not os.path.exists('local_database.db'):
+if not os.path.exists('customer_management.db'):
     init_db(engine)

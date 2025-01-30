@@ -6,7 +6,6 @@ import logging
 import pandas as pd
 
 from customer_management.database.settings import engine, HANDLER_CONNECTION
-
 logger = logging.getLogger(__name__)
 
 def bronze_customers():
@@ -36,7 +35,7 @@ def bronze_customers():
     """
     
     try:
-        with engine.connect() as conn:
+        with HANDLER_CONNECTION() as conn:
             df = pd.read_sql(query, conn, params=None, coerce_float=True, parse_dates=['created_at'])
             if df.empty:
                 logger.warning("No data retrieved from database")
@@ -46,5 +45,4 @@ def bronze_customers():
             return df
     except Exception as e:
         logger.error(f"Error reading from database: {str(e)}")
-        logger.error(f"Connection string: {HANDLER_CONNECTION}")
         return pd.DataFrame()
