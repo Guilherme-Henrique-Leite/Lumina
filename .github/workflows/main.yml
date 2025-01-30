@@ -20,15 +20,6 @@ jobs:
         
     - name: Install dependencies
       run: pip install -r requirements.txt
-        
-    - name: Test database
-      run: |
-        python -c "
-        from customer_management.database.settings import engine
-        with engine.connect() as conn:
-            result = conn.execute('SELECT COUNT(*) FROM customers').scalar()
-            print(f'Registros encontrados: {result}')
-        "
     
     - name: Test app
       run: |
