@@ -10,22 +10,7 @@ CREATE TABLE IF NOT EXISTS customers (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT OR IGNORE INTO customers (name, email, contact, country, state, city, neighborhood, created_at)
-VALUES ('João Silva', 'joao.silva@email.com', '+5511999999999', 'Brasil', 'São Paulo', 'São Paulo', 'Vila Mariana', '2024-01-01');
-
-INSERT OR IGNORE INTO customers (name, email, contact, country, state, city, neighborhood, created_at)
-VALUES ('Maria Santos', 'maria.santos@email.com', '+5511988888888', 'Brasil', 'São Paulo', 'São Paulo', 'Moema', '2024-01-01');
-
-INSERT OR IGNORE INTO customers (name, email, contact, country, state, city, neighborhood, created_at)
-VALUES ('Pedro Oliveira', 'pedro.oliveira@email.com', '+5511977777777', 'Brasil', 'Rio de Janeiro', 'Rio de Janeiro', 'Copacabana', '2024-01-01');
-
-INSERT OR IGNORE INTO customers (name, email, contact, country, state, city, neighborhood, created_at)
-VALUES ('Ana Souza', 'ana.souza@email.com', '+351123456789', 'Portugal', 'Lisboa', 'Lisboa', 'Baixa', '2024-01-01');
-
-INSERT OR IGNORE INTO customers (name, email, contact, country, state, city, neighborhood, created_at)
-VALUES ('Manuel Torres', 'manuel.torres@email.com', '+351987654321', 'Portugal', 'Porto', 'Porto', 'Ribeira', '2024-01-01');
-
-INSERT INTO customers (name, email, contact, country, state, city, neighborhood, created_at) VALUES 
+INSERT OR IGNORE INTO customers (name, email, contact, country, state, city, neighborhood, created_at) VALUES 
 -- January
 ('Carlos Rodriguez', 'carlos.r@email.com', '+34666555444', 'Espanha', 'Madrid', 'Madrid', 'Centro', '2024-02-01'),
 ('Isabella Ferrari', 'isabella.f@email.com', '+39333222111', 'Itália', 'Roma', 'Roma', 'Centro Storico', '2024-02-01'),
