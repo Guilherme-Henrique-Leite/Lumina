@@ -34,8 +34,11 @@ jobs:
     - name: Test Database Initialization
       run: |
         python -c "
-        from customer_management.database.settings import engine, init_db
-        init_db(engine)
+        import sys
+        import os
+        sys.path.append(os.path.abspath('.'))
+        from customer_management.database.settings import engine
+        
         with engine.connect() as conn:
             result = conn.execute('SELECT COUNT(*) FROM customers').scalar()
             assert result > 0, 'Database should have initial records'
@@ -43,7 +46,7 @@ jobs:
         
     - name: Test Streamlit App
       run: |
-        timeout 10s streamlit run app.py &
+        nohup streamlit run app.py &
         sleep 5
         curl -f http://localhost:8501 || exit 1
 
@@ -52,11 +55,4 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     
-    steps:
-    - name: Deploy to Streamlit
-      run: |
-        echo "🚀 Deploy automático configurado!"
-        echo "Configure o deploy no Streamlit Cloud:"
-        echo "1. Vá para https://share.streamlit.io"
-        echo "2. Conecte este repositório"
-        echo "3. Configure app.py como arquivo principal" 
+    
