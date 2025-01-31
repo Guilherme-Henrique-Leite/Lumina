@@ -1,7 +1,5 @@
 # Customer Management
 
-**Status**: In progress... 🚧
-
 This is a customer management project developed using Python and a layered architecture (Bronze, Silver, Gold) to organize and process data efficiently. The main goal is to create a robust pipeline for managing and analyzing customer information.
 
 ## Technologies Used
@@ -40,22 +38,9 @@ The project follows a layered architecture to process data incrementally and org
     poetry install
     ```
 
-3. Set up the environment:
-   - Create a `.env` file with the necessary database connection details.
-
-   Example `.env` file:
-    ```bash
-    DATABASE_URL=postgresql://user:password@host:port/database
-    ```
-
-4. Run the pipeline:
+3. Run the pipeline:
     - Use the `app.py` file to execute the pipeline or visualize the data with Streamlit:
     ```bash
     cd customer-management 
     run following commands: streamlit run app.py or task run
     ```
-
-## Next Steps
-- Create Admin module
-- Write tests for the pipeline.
-- Deploy application.
