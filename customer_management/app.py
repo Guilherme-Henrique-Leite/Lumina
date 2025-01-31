@@ -2,6 +2,11 @@
 Module to run Streamlit Page
 """
 import streamlit as st
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 
 def main():
     from customer_management.streamlit.pages import render_sidebar, get_pages
