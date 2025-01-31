@@ -1,0 +1,3 @@
+include requirements.txt
+include customer_management/database/*.sql
+recursive-include customer_management/streamlit/static *

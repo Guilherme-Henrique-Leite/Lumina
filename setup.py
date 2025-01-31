@@ -4,7 +4,9 @@ setup(
     name="customer_management",
     version="0.1.0",
     packages=find_packages(),
-    include_package_data=True,
+    package_data={
+        'customer_management': ['database/*.sql']
+    },
     install_requires=[
         "streamlit",
         "pandas",
@@ -13,4 +15,9 @@ setup(
         "openpyxl",
         "pytz"
     ],
+    entry_points={
+        'console_scripts': [
+            'run-app=customer_management.app:main'
+        ]
+    }
 ) 

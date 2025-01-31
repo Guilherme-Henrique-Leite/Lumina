@@ -502,14 +502,16 @@ def run():
                     insights.append(f"Alta disparidade entre segmentos: {amplitude:.1f}%")
                     acoes.append("Equilibrar distribuição entre segmentos")
                 
-                if evolucao_segmentos.shape[0] > 1:
-                    tendencia = evolucao_segmentos.pct_change().mean()
+                if not evolucao_segmentos.empty and len(evolucao_segmentos) > 1:
+                    tendencia = evolucao_segmentos.pct_change(fill_method=None).fillna(0).mean()
                     seg_crescente = tendencia.idxmax()
                     seg_decrescente = tendencia.idxmin()
                     
                     if tendencia[seg_decrescente] < -0.1:
                         insights.append(f"Segmento {seg_decrescente} em declínio")
                         pontos_atencao.append(f"Reversão necessária em {seg_decrescente}")
+                
+                volatilidade = evolucao_segmentos.pct_change(fill_method=None).std().fillna(0) * 100
                 
                 return {
                     'metricas': {
